@@ -18,7 +18,7 @@ export async function createLightField({active,layer}) {
  mesh.frustumCulled=false;scene.add(mesh);
  layer.appendChild(canvas);root.dataset.fx='webgl';
  let raf=0,disposed=false,last=0,frames=0;
- function size(){const rect=layer.getBoundingClientRect();renderer.setSize(rect.width,innerHeight,false);uniforms.uAspect.value=rect.width/innerHeight;}
+ function size(){const rect=layer.getBoundingClientRect();renderer.setPixelRatio(Math.min(1,1100/rect.width));renderer.setSize(rect.width,innerHeight,false);uniforms.uAspect.value=rect.width/innerHeight;}
  size();
  function pointer(event){const rect=layer.getBoundingClientRect();uniforms.uPointer.value.set(Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width)),1-event.clientY/innerHeight);}
  function draw(time){
