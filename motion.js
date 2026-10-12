@@ -1,7 +1,10 @@
+import { createDesktopMotion } from './desktop-motion.js';
+
 export function startMotion() {
  const root=document.documentElement, button=document.querySelector('.motion-toggle');
  const preference=matchMedia('(prefers-reduced-motion: reduce)');
- let context=null, effect=null, manualPause=false, revision=0;
+ const desktopPreference=matchMedia('(min-width: 768px)');
+ let context=null, effect=null, manualPause=false, desktopChoice=null, revision=0;
  const counters=[...document.querySelectorAll('.counter')];
  const format=new Intl.NumberFormat('ru-RU');
  function stop() {
@@ -12,7 +15,7 @@ export function startMotion() {
  }
  async function apply() {
   stop();
-  const disabled=preference.matches||manualPause;
+  const disabled=desktopPreference.matches ? (desktopChoice===null ? preference.matches : !desktopChoice) : preference.matches||manualPause;
   root.dataset.motion=disabled?'paused':'full';
   button.setAttribute('aria-pressed',String(disabled));
   button.setAttribute('aria-label',disabled?'Включить анимацию':'Отключить анимацию');
@@ -26,6 +29,7 @@ export function startMotion() {
   context=gsap.matchMedia();
   context.add({desktop:'(min-width: 768px)',mobile:'(max-width: 767px)'},media=>{
    const desktop=media.conditions.desktop;
+   if(desktop)return createDesktopMotion({gsap,ScrollTrigger,SplitText});
    const intro=gsap.timeline({defaults:{ease:'expo.out'}});
    intro.from('.hero-brand',{opacity:.1,duration:1.3})
     .from('.hero-description',{y:16,opacity:.35,duration:.8},'-=.8')
@@ -81,8 +85,9 @@ export function startMotion() {
    effect=result;
   } catch { root.dataset.fx='fallback'; }
  }
- button.addEventListener('click',()=>{manualPause=!manualPause;apply();});
+ button.addEventListener('click',()=>{if(desktopPreference.matches)desktopChoice=root.dataset.motion!=='full';else manualPause=!manualPause;apply();});
  preference.addEventListener('change',apply);
+ desktopPreference.addEventListener('change',apply);
  document.querySelectorAll('img').forEach(image=>image.addEventListener('load',()=>window.ScrollTrigger?.refresh(),{once:true}));
  apply();
 }

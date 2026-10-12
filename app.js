@@ -3,7 +3,7 @@ import { startMotion } from './motion.js';
 import { whatsappUrl } from './data/whatsapp.js';
 
 const $ = selector => document.querySelector(selector);
-const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'paused';
+const reducedMotion = () => matchMedia('(min-width: 768px)').matches ? document.documentElement.dataset.motion === 'paused' : matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'paused';
 const navigation = $('#navigation-dialog'), planDialog = $('#plan-dialog'), sticky = $('.sticky-cta');
 let currentApartment = siteConfig.apartments[0], transitionVersion = 0;
 const stickyLink = sticky.querySelector('a');

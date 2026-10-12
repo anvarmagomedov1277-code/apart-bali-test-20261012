@@ -1,4 +1,5 @@
 /* One source of content, composed for spacious screens. */
+.desktop-wordmark{display:none}
 @media(min-width:768px){
  :root{--width:1920px;--gutter:clamp(40px,6vw,120px);scroll-padding-top:30px}
  .site-shell{width:100%;max-width:1920px}
@@ -17,7 +18,9 @@
  .hero-scene{inset:0;aspect-ratio:auto;height:100%}
  .hero-backdrop,.hero-foreground{object-fit:cover}
  .hero-foreground{mask-image:url(assets/facade-wide-mask.svg);-webkit-mask-image:url(assets/facade-wide-mask.svg);mask-size:cover;-webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center}
- .hero-brand{top:130px;left:28%;width:44%}.hero-brand img{filter:invert(1) url(#brand-weight)}
+ .hero-brand{top:110px;left:50%;width:70%;margin-left:-35%;text-align:center}
+ .hero-brand>img{display:none}.desktop-wordmark{display:flex;justify-content:center;gap:.06em;font:300 clamp(105px,13vw,250px)/1.1 Unbounded,sans-serif;letter-spacing:-.025em;color:#fff9ec;white-space:nowrap}
+ .desktop-wordmark>span{display:inline-block;will-change:transform}
  .hero-shade{background:linear-gradient(90deg,#111b16b8,transparent 65%),linear-gradient(180deg,#111b1655,transparent 30%,#151b1726 48%,#151b17d9 88%,var(--graphite))}
  .hero-description{top:clamp(260px,21vw,335px);width:440px;font-size:12px;letter-spacing:.08em}
  .hero-offer{max-width:400px}.hero-offer h2{font-size:clamp(40px,4.2vw,62px)}
@@ -66,7 +69,7 @@
 @media(min-width:768px) and (max-width:1100px){
  .desktop-navigation{gap:18px;padding-right:165px}.desktop-navigation a{font-size:11px}
  .header-location img{width:72px}.header-phone{font-size:12px}.header-instagram{font-size:12px}
- .hero{padding-top:370px}.hero-offer{max-width:330px}.hero-brand{top:125px;width:52%;left:24%}
+ .hero{padding-top:370px}.hero-offer{max-width:330px}.hero-brand{top:135px;width:76%;left:50%;margin-left:-38%}
  .hero-description{top:240px;font-size:10px;width:350px}
  .project-facts{padding:30px 40px}.fact-main{gap:18px}.fact-main strong{font-size:90px}.fact-pair{gap:12px}.fact-pair strong{font-size:28px}
  .investment-scenarios{margin-inline:20px;grid-template-columns:1fr 60px 1fr}.income-number{font-size:52px;gap:6px}.income-dash{font-size:25px}
@@ -74,4 +77,21 @@
  .management{gap:40px}.management-window{height:400px}.management .text-link{font-size:13px}
  .apartments{column-gap:40px}.contact{column-gap:50px}.contact-direct{flex-direction:column;gap:0}
  .whatsapp-button{font-size:12px;padding-inline:14px}
+}
+@media(min-width:768px){
+ .site-header .motion-toggle{position:fixed;z-index:20;background:#151b17d9;border:1px solid #74826688;pointer-events:auto}
+ html[data-motion=full] .fx-layer{display:block}
+ .hero-camera{will-change:transform}.hero-foreground,.hero-shade{pointer-events:none}.hero-brand{pointer-events:auto}
+ .desktop-navigation a,.button,.text-link,.area-choice,.icon-button,.header-contacts a,.preview-link,.brand{position:relative}
+ .button::before{content:"";position:absolute;inset:0;transform:translateX(-115%) skewX(-18deg);background:linear-gradient(90deg,transparent,#fff8dc50,transparent);pointer-events:none}
+ html[data-motion=full] .button.is-motion-hover::before{animation:desktop-sheen .7s ease-out both!important}
+ .desktop-navigation a::after,.text-link::after,.header-contacts a::after,.preview-link::after{content:"";position:absolute;left:0;right:0;bottom:5px;height:1px;background:var(--sand);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+ .desktop-navigation a:hover::after,.header-contacts a:hover::after,.text-link:hover::after,.preview-link:hover::after{transform:scaleX(1)}
+ html[data-motion=paused] .button::before{animation:none!important}
+ main>section{isolation:isolate}.desktop-graphic{position:absolute;z-index:-1;right:-70px;top:15%;width:clamp(350px,40vw,700px);aspect-ratio:1;pointer-events:none;opacity:.2}
+ .desktop-graphic span{position:absolute;inset:10%;border:1px solid #b6c196;border-radius:50%;transform:rotate(-30deg) scaleY(.65)}
+ .desktop-graphic span:nth-child(2){inset:20%;transform:rotate(25deg) scaleY(.8)}.desktop-graphic span:nth-child(3){inset:32%;border-color:var(--sand)}
+ .hero .desktop-graphic{z-index:3;top:50%;opacity:.18}.project .desktop-graphic{top:0}.contact .desktop-graphic{right:20%;top:0}
+ .desktop-text-mask{padding-block:8px;margin-block:-8px}
+ @keyframes desktop-sheen{to{transform:translateX(115%) skewX(-18deg)}}
 }
