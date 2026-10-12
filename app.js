@@ -1,0 +1,124 @@
+import { siteConfig } from './data/site-config.js';
+import { startMotion } from './motion.js';
+import { whatsappUrl } from './data/whatsapp.js';
+
+const $ = selector => document.querySelector(selector);
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'paused';
+const navigation = $('#navigation-dialog'), planDialog = $('#plan-dialog'), sticky = $('.sticky-cta');
+let currentApartment = siteConfig.apartments[0], transitionVersion = 0;
+const stickyLink = sticky.querySelector('a');
+const contexts = { home:'installments', project:'project', investment:'investment', apartments:'apartment', contact:'general' };
+const sections = [...document.querySelectorAll('main > section')];
+function updateContext() {
+ const section = sections.find(item => { const r = item.getBoundingClientRect(); return r.top <= innerHeight * .5 && r.bottom > innerHeight * .5; }) || sections[0];
+ stickyLink.dataset.waContext = contexts[section.id];
+ stickyLink.href = whatsappUrl(contexts[section.id], currentApartment);
+ stickyLink.querySelector('span').textContent = section.id === 'apartments' ? 'Получить расчёт ' + currentApartment.area + ' м²' : section.id === 'investment' ? 'Получить инвестиционный расчёт' : section.id === 'project' ? 'Получить презентацию комплекса' : 'Получить подробные условия';
+}
+let heroVisible = true, contactVisible = false;
+function updateSticky() {
+ const focused = ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName);
+ sticky.hidden = heroVisible || contactVisible || navigation.open || planDialog.open || focused;
+}
+for (const dialog of [navigation, planDialog]) {
+ dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
+ dialog.addEventListener('click', event => {
+  if (event.target !== dialog) return;
+  const r = dialog.getBoundingClientRect();
+  if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close();
+ });
+ dialog.addEventListener('close', () => { document.body.style.overflow = ''; updateSticky(); });
+}
+function openDialog(dialog) { dialog.showModal(); document.body.style.overflow = 'hidden'; sticky.hidden = true; }
+$('.menu-button').addEventListener('click', () => openDialog(navigation));
+navigation.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => {
+ navigation.close();
+ const section = $(link.getAttribute('href'));
+ section.tabIndex = -1; section.focus({ preventScroll:true });
+}));
+function refresh() { window.ScrollTrigger?.refresh(); }
+function updateApartment(apartment) {
+ const image = $('#apartment-image');
+ const index = siteConfig.apartments.indexOf(apartment);
+ image.src = apartment.image;
+ image.alt = 'Планировка: ' + apartment.title.toLowerCase();
+ $('#apartment-title').textContent = apartment.title;
+ $('#apartment-description').textContent = apartment.description;
+ $('#apartment-status').textContent = apartment.status;
+ $('#plan-position').textContent = (index + 1) + ' / ' + siteConfig.apartments.length;
+ const indicator = $('.selector-indicator');
+ const state = window.Flip && !reducedMotion() ? window.Flip.getState(indicator) : null;
+ indicator.style.width = 100 / siteConfig.apartments.length + '%';
+ indicator.style.left = index * 100 / siteConfig.apartments.length + '%';
+ if (state) window.Flip.from(state, { duration:.55, ease:'expo.out', absolute:true });
+ document.querySelectorAll('[data-apartment]').forEach(button => {
+  const active = button.dataset.apartment === apartment.id;
+  button.classList.toggle('is-active',active); button.setAttribute('aria-pressed',String(active));
+ });
+ currentApartment = apartment;
+ $('#select-apartment').href = whatsappUrl('apartment', apartment);
+ updateContext(); refresh();
+}
+async function selectPlan(id, direction = 1) {
+ const apartment = siteConfig.apartments.find(item => item.id === id);
+ if (!apartment) return;
+ const version = ++transitionVersion;
+ if (currentApartment.id === id) return;
+ const probe = new Image(); probe.src = apartment.image;
+ try { await probe.decode(); } catch { if (version === transitionVersion) $('#apartment-status').textContent = 'Не удалось загрузить планировку. Попробуйте переключить ещё раз.'; return; }
+ if (version !== transitionVersion) return;
+ const image = $('#apartment-image');
+ window.gsap?.killTweensOf(image);
+ updateApartment(apartment);
+ if (window.gsap && !reducedMotion()) {
+  window.gsap.fromTo(image, { rotationY:direction * 32, x:direction * 45, scale:.9, opacity:.25 }, { rotationY:0, x:0, scale:1, opacity:1, duration:.72, ease:'expo.out', clearProps:'transform,opacity' });
+  window.gsap.fromTo('.apartment-info', { opacity:.4, y:10 }, { opacity:1, y:0, duration:.5, ease:'expo.out', overwrite:true, clearProps:'transform,opacity' });
+ }
+}
+function cycle(direction) {
+ const index = siteConfig.apartments.indexOf(currentApartment);
+ selectPlan(siteConfig.apartments[(index + direction + siteConfig.apartments.length) % siteConfig.apartments.length].id,direction);
+}
+document.querySelectorAll('[data-apartment]').forEach(button => button.addEventListener('click',()=>selectPlan(button.dataset.apartment)));
+$('.previous-plan').addEventListener('click',()=>cycle(-1));
+$('.next-plan').addEventListener('click',()=>cycle(1));
+$('.apartment-stage').addEventListener('keydown',event=>{
+ if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+ event.preventDefault(); cycle(event.key === 'ArrowRight' ? 1 : -1);
+});
+let pointerStart = null;
+$('.apartment-stage').addEventListener('pointerdown',event=>{ pointerStart = {x:event.clientX,y:event.clientY}; });
+$('.apartment-stage').addEventListener('pointerup',event=>{
+ if (!pointerStart || window.Draggable?.get($('.plan-drag'))) { pointerStart = null; return; }
+ const dx=event.clientX-pointerStart.x, dy=event.clientY-pointerStart.y; pointerStart=null;
+ if (Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.4) cycle(dx<0 ? 1 : -1);
+});
+$('.zoom-button').addEventListener('click',()=>{
+ $('#plan-dialog-title').textContent=currentApartment.title;
+ $('#plan-dialog-image').src=currentApartment.image;
+ $('#plan-dialog-image').alt='Увеличенная планировка: '+currentApartment.title.toLowerCase();
+ $('#plan-dialog-caption').textContent=currentApartment.status;
+ openDialog(planDialog);
+});
+const observer=new IntersectionObserver(entries=>{
+ for(const e of entries) { if(e.target.id==='home')heroVisible=e.isIntersecting; if(e.target.id==='contact')contactVisible=e.isIntersecting; }
+ updateSticky();
+},{threshold:0});
+observer.observe($('#home')); observer.observe($('#contact'));
+$('.apartment-stage').addEventListener('pointercancel',()=>{pointerStart=null;});
+let scrollPending=false;
+window.addEventListener('scroll',()=>{if(scrollPending)return;scrollPending=true;requestAnimationFrame(()=>{updateContext();scrollPending=false;});},{passive:true});
+window.addEventListener('resize',updateContext);
+updateContext();
+document.addEventListener('focusin',updateSticky); document.addEventListener('focusout',()=>requestAnimationFrame(updateSticky));
+function init() {
+ if (window.gsap && window.Flip) window.gsap.registerPlugin(window.Flip);
+ if (window.gsap && window.Draggable) {
+  window.gsap.registerPlugin(window.Draggable);
+  window.Draggable.create('.plan-drag',{type:'x',bounds:{minX:-80,maxX:80},edgeResistance:.75,allowNativeTouchScrolling:true,minimumMovement:8,
+   onDragEnd(){const x=this.x;window.gsap.to(this.target,{x:0,duration:reducedMotion()?0:.35,ease:'expo.out'});if(Math.abs(x)>40)cycle(x<0?1:-1);}
+  });
+ }
+ startMotion();
+}
+if(document.readyState==='complete')init();else window.addEventListener('load',init,{once:true});
