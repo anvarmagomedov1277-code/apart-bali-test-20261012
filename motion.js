@@ -1,4 +1,4 @@
-import { createDesktopMotion } from './desktop-motion.js';
+import { createDesktopMotion } from './desktop-motion.js?v=20261012-desktop5';
 
 export function startMotion() {
  const root=document.documentElement, button=document.querySelector('.motion-toggle');

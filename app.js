@@ -1,5 +1,5 @@
 import { siteConfig } from './data/site-config.js';
-import { startMotion } from './motion.js';
+import { startMotion } from './motion.js?v=20261012-desktop5';
 import { whatsappUrl } from './data/whatsapp.js';
 
 const $ = selector => document.querySelector(selector);
