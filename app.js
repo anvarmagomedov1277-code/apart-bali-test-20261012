@@ -1,9 +1,9 @@
 import { siteConfig } from './data/site-config.js';
-import { startMotion } from './motion.js?v=20261012-desktop5';
+import { startMotion } from './motion.js?v=20261013-facade6';
 import { whatsappUrl } from './data/whatsapp.js';
 
 const $ = selector => document.querySelector(selector);
-const reducedMotion = () => matchMedia('(min-width: 768px)').matches ? document.documentElement.dataset.motion === 'paused' : matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'paused';
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const navigation = $('#navigation-dialog'), planDialog = $('#plan-dialog'), sticky = $('.sticky-cta');
 let currentApartment = siteConfig.apartments[0], transitionVersion = 0;
 const stickyLink = sticky.querySelector('a');
@@ -45,6 +45,7 @@ function updateApartment(apartment) {
  $('#apartment-title').textContent = apartment.title;
  $('#apartment-description').textContent = apartment.description;
  $('#apartment-status').textContent = apartment.status;
+ $('#apartment-features').replaceChildren(...apartment.features.map(text=>{const item=document.createElement('li');item.textContent=text;return item;}));
  $('#plan-position').textContent = (index + 1) + ' / ' + siteConfig.apartments.length;
  const indicator = $('.selector-indicator');
  const state = window.Flip && !reducedMotion() ? window.Flip.getState(indicator) : null;
@@ -57,13 +58,14 @@ function updateApartment(apartment) {
  });
  currentApartment = apartment;
  $('#select-apartment').href = whatsappUrl('apartment', apartment);
+ $('#select-apartment span').textContent = 'Получить расчёт ' + apartment.area + ' м²';
  updateContext(); refresh();
 }
 async function selectPlan(id, direction = 1) {
  const apartment = siteConfig.apartments.find(item => item.id === id);
  if (!apartment) return;
  const version = ++transitionVersion;
- if (currentApartment.id === id) return;
+ if (currentApartment.id === id) { $('#apartment-status').textContent = currentApartment.status; return; }
  const probe = new Image(); probe.src = apartment.image;
  try { await probe.decode(); } catch { if (version === transitionVersion) $('#apartment-status').textContent = 'Не удалось загрузить планировку. Попробуйте переключить ещё раз.'; return; }
  if (version !== transitionVersion) return;
@@ -71,8 +73,8 @@ async function selectPlan(id, direction = 1) {
  window.gsap?.killTweensOf(image);
  updateApartment(apartment);
  if (window.gsap && !reducedMotion()) {
-  window.gsap.fromTo(image, { rotationY:direction * 32, x:direction * 45, scale:.9, opacity:.25 }, { rotationY:0, x:0, scale:1, opacity:1, duration:.72, ease:'expo.out', clearProps:'transform,opacity' });
-  window.gsap.fromTo('.apartment-info', { opacity:.4, y:10 }, { opacity:1, y:0, duration:.5, ease:'expo.out', overwrite:true, clearProps:'transform,opacity' });
+  window.gsap.fromTo(image, { x:direction * 22, opacity:.4 }, { x:0, opacity:1, duration:.38, ease:'power2.out', clearProps:'transform,opacity' });
+  window.gsap.fromTo('.apartment-info', { opacity:.7, y:4 }, { opacity:1, y:0, duration:.28, ease:'power2.out', overwrite:true, clearProps:'transform,opacity' });
  }
 }
 function cycle(direction) {

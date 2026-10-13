@@ -12,7 +12,7 @@ export async function createLightField({active,layer}) {
  const uniforms={uTime:{value:0},uScroll:{value:0},uPointer:{value:new THREE.Vector2(.5,.5)},uAspect:{value:1}};
  const material=new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms,
   vertexShader:'varying vec2 vUv; void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}',
-  fragmentShader:'uniform float uTime; uniform float uScroll; uniform float uAspect; uniform vec2 uPointer; varying vec2 vUv; void main(){vec2 p=vUv;float t=uTime*.22+uScroll*1.6;vec2 q=vec2(p.x*uAspect,p.y);float a=sin(q.x*10.0+sin(q.y*8.0+t)*1.4+t);float b=cos(q.y*12.0+cos(q.x*9.0-t)*1.2-t*.6);float caustic=pow(max(0.0,1.0-abs(a+b)*.75),7.0);float ray=pow(max(0.0,sin(p.x*8.0+p.y*3.0+t)),9.0);float ripple=sin(distance(p,uPointer)*38.0-t*5.0)*.5+.5;float edge=smoothstep(0.0,.12,p.y)*(1.0-smoothstep(.8,1.0,p.y));float alpha=(caustic*.22+ray*.13+ripple*.025)*edge;gl_FragColor=vec4(vec3(.94,.77,.43),alpha);}'
+  fragmentShader:'uniform float uTime; uniform float uScroll; uniform float uAspect; uniform vec2 uPointer; varying vec2 vUv; void main(){vec2 p=vUv;float t=fract(uTime*.025+uScroll*.07);float diagonal=p.x+p.y*.12;float beam=exp(-pow((diagonal-t)*9.0,2.0));float fine=exp(-pow((diagonal-t-.06)*75.0,2.0));float edge=smoothstep(0.0,.12,p.y)*(1.0-smoothstep(.82,1.0,p.y));vec3 color=mix(vec3(.53,.69,.9),vec3(.95,.6,.36),p.x);gl_FragColor=vec4(color,(beam*.13+fine*.1)*edge);}'
  });
  const geometry=new THREE.PlaneGeometry(2,2),mesh=new THREE.Mesh(geometry,material);
  mesh.frustumCulled=false;scene.add(mesh);
