@@ -1,7 +1,12 @@
-import { createDesktopMotion } from './desktop-motion.js?v=20261013-facade6';
+import { createDesktopMotion } from './desktop-motion.js?v=20261013-motion7';
 
 export function startMotion() {
  const root=document.documentElement,preference=matchMedia('(prefers-reduced-motion: reduce)');
+ const fields=[...document.querySelectorAll('.ambient-field')],visible=new Set();
+ const syncAmbient=()=>fields.forEach(field=>field.classList.toggle('is-paused',document.hidden||!visible.has(field)));
+ const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)visible.add(entry.target);else visible.delete(entry.target);});syncAmbient();});
+ fields.forEach(field=>{field.classList.add('is-paused');observer.observe(field);});
+ document.addEventListener('visibilitychange',syncAmbient);
  let context=null,effect=null,revision=0;
  async function apply(){
   const version=++revision;
@@ -18,7 +23,7 @@ export function startMotion() {
   ScrollTrigger.refresh();
   if(preference.matches){root.dataset.fx='reduced';return;}
   try{
-   const {createLightField}=await import('./fx.js?v=20261013-facade6');
+   const {createLightField}=await import('./fx.js?v=20261013-motion7');
    const result=await createLightField({active:()=>version===revision&&root.dataset.motion==='full',layer:document.querySelector('#fx-layer')});
    if(version!==revision){result?.dispose();return;}effect=result;
   }catch{root.dataset.fx='fallback';}

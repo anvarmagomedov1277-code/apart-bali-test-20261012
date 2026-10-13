@@ -28,7 +28,7 @@ main,footer{position:relative;z-index:2}.section-pad{padding:68px 24px}.section-
 .menu-button{gap:6px;align-content:center}.menu-button span{height:1px;width:22px;background:currentColor}.menu-button span:last-child{width:15px;justify-self:end}
 .scroll-progress{position:fixed;z-index:10;width:min(100%,430px);left:50%;top:0;transform:translateX(-50%);height:2px;pointer-events:none}
 .scroll-progress span{display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:left;background:var(--apricot)}
-.fx-layer{position:fixed;z-index:3;inset:0 auto 0 50%;transform:translateX(-50%);width:min(100%,430px);pointer-events:none;mix-blend-mode:screen;opacity:.22}
+.fx-layer{position:fixed;z-index:3;inset:0 auto 0 50%;transform:translateX(-50%);width:min(100%,430px);pointer-events:none;mix-blend-mode:screen;opacity:.45}
 .fx-layer canvas{display:block;width:100%;height:100%}
 .hero{position:relative;min-height:730px;padding:365px 24px 26px;overflow:hidden}
 .hero-scene{position:absolute;top:0;left:0;width:100%;aspect-ratio:780/1090;z-index:0}.hero-camera{position:absolute;inset:0;transform-origin:center}
@@ -108,5 +108,25 @@ dialog::backdrop{background:#101b2be8}.dialog-top{display:flex;justify-content:s
  .section-pad{padding-inline:20px}.hero{padding:317px 20px 24px;min-height:695px}.hero-description{top:165px;width:280px;font-size:9px}.hero-investment{top:233px;left:20px;font-size:14px}.hero-offer h2{font-size:32px}.hero-benefit{font-size:14px}.hero-benefit strong{font-size:17px}.button{font-size:12px;padding-inline:14px}h2{font-size:25px}.fact-main strong{font-size:78px}.fact-main{gap:19px}.income-number{gap:8px;font-size:44px}.year-round-copy{margin-left:30px;padding-inline:20px}.management .text-link{font-size:12px}
  .apartment-viewer{grid-template-columns:36px minmax(0,1fr) 36px;gap:5px}.apartment-viewer>.icon-button{min-width:36px}.apartment-stage{height:390px}.plan-navigation{font-size:10px;gap:10px}
 }
-@media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.fx-layer{display:none}}
+/* Moving reflections echo the long planes of the facades; no orbit geometry. */
+main>section,.year-round-story,.year-round-copy,.management{position:relative;isolation:isolate}
+.ambient-field{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;--light-rgb:242,173,133;--light-duration:10s}
+.ambient-field span{position:absolute;left:0;top:-15%;width:42%;height:130%;background:linear-gradient(90deg,transparent,rgba(var(--light-rgb),.19) 45%,rgba(var(--light-rgb),.05) 75%,transparent);border-right:1px solid rgba(var(--light-rgb),.35);transform:translate3d(-80%,0,0) skewX(-16deg);animation:facade-reflection var(--light-duration) ease-in-out infinite alternate;will-change:transform,opacity}
+.ambient-field span:nth-child(2){width:21%;left:52%;animation-delay:-5s;animation-duration:14s;background:linear-gradient(90deg,transparent,rgba(126,170,216,.2),transparent);border-color:rgba(126,170,216,.4)}
+.ambient-field span:nth-child(3){width:15%;left:80%;animation-delay:-9s;animation-duration:12s;background:linear-gradient(90deg,transparent,rgba(var(--light-rgb),.23),transparent)}
+.ambient-field i{position:absolute;inset:0;opacity:.8;background:linear-gradient(115deg,transparent 40%,rgba(var(--light-rgb),.14) 49%,transparent 57%);animation:facade-breath 5s ease-in-out infinite alternate;will-change:opacity}
+.ambient-project,.ambient-apartments{--light-rgb:121,70,40}.ambient-project{--light-duration:8s}.ambient-apartments span{width:24%;height:150%;top:-25%;border-color:#79462835}
+.ambient-investment{--light-duration:12s}.ambient-investment span{height:100%;top:0}.ambient-investment span:nth-child(2){width:35%}
+.ambient-contact{--light-rgb:73,99,133;--light-duration:9s}.ambient-contact span:nth-child(2){background:linear-gradient(90deg,transparent,#b25c2d30,transparent)}
+.ambient-hero{z-index:3;inset:0 0 40%;--light-duration:9s}.ambient-hero span{opacity:.5;border:0}.ambient-hero i{opacity:.4}
+.ambient-season{--light-rgb:152,199,222;--light-duration:8s}.ambient-season span{width:55%;transform:translate3d(-80%,0,0) skewX(-30deg)}
+.ambient-service{--light-duration:11s}.ambient-service span{width:27%}
+.capital-light{inset:10% 5%;border-color:#91adc255}
+.capital-light i{width:10%;background:linear-gradient(90deg,transparent,#adc4e733,transparent);border-left:1px solid #adc4e755}
+.capital-light i:nth-child(2){background:linear-gradient(90deg,transparent,#f2ad8533,transparent)}
+.ambient-field.is-paused span,.ambient-field.is-paused i{animation-play-state:paused}
+@keyframes facade-reflection{0%{transform:translate3d(-80%,0,0) skewX(-16deg);opacity:.45}100%{transform:translate3d(180%,3%,0) skewX(-16deg);opacity:1}}
+@keyframes facade-breath{from{opacity:.25}to{opacity:1}}
+@keyframes facade-soft-light{from{opacity:.2}to{opacity:.7}}
+@media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.fx-layer{display:none}.ambient-field span,.ambient-field i{animation:facade-soft-light 5s ease-in-out infinite alternate!important;transform:skewX(-16deg)!important;will-change:opacity}.ambient-field span:nth-child(2){animation-delay:-2.5s!important}.ambient-field span:nth-child(3){animation-delay:-4s!important}.ambient-field.is-paused span,.ambient-field.is-paused i{animation-play-state:paused!important}}
 @media(forced-colors:active){.hero-shade{background:Canvas}.button{border:1px solid ButtonText}.hero-brand img,.brand img,.dialog-logo{filter:none;mix-blend-mode:normal}.fx-layer{display:none}}
