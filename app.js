@@ -1,5 +1,5 @@
 import { siteConfig } from './data/site-config.js';
-import { startMotion } from './motion.js?v=20261013-motion7';
+import { startMotion } from './motion.js?v=20261013-scenes8';
 import { whatsappUrl } from './data/whatsapp.js';
 
 const $ = selector => document.querySelector(selector);
@@ -73,8 +73,10 @@ async function selectPlan(id, direction = 1) {
  window.gsap?.killTweensOf(image);
  updateApartment(apartment);
  if (window.gsap && !reducedMotion()) {
-  window.gsap.fromTo(image, { x:direction * 22, opacity:.4 }, { x:0, opacity:1, duration:.38, ease:'power2.out', clearProps:'transform,opacity' });
-  window.gsap.fromTo('.apartment-info', { opacity:.7, y:4 }, { opacity:1, y:0, duration:.28, ease:'power2.out', overwrite:true, clearProps:'transform,opacity' });
+  window.gsap.fromTo(image, { x:direction * 60, scale:.92, opacity:0 }, { x:0, scale:1, opacity:1, duration:.55, ease:'power3.out', clearProps:'transform,opacity' });
+  const details=[...document.querySelectorAll('.apartment-info>h3,.apartment-info>p,#apartment-features>li')];
+  window.gsap.killTweensOf(details);
+  window.gsap.fromTo(details, { opacity:0, y:26 }, { opacity:1, y:0, duration:.4, stagger:.035, ease:'power3.out', overwrite:true, clearProps:'transform,opacity' });
  }
 }
 function cycle(direction) {
@@ -123,4 +125,4 @@ function init() {
  }
  startMotion();
 }
-if(document.readyState==='complete')init();else window.addEventListener('load',init,{once:true});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
