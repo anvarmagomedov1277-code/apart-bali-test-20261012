@@ -1,11 +1,22 @@
 import { siteConfig } from './data/site-config.js';
-import { startMotion } from './motion.js?v=20261013-scenes8';
+import { startMotion, motionIsReduced } from './motion.js?v=20261013-scenes9';
 import { whatsappUrl } from './data/whatsapp.js';
 
 const $ = selector => document.querySelector(selector);
-const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reducedMotion = motionIsReduced;
 const navigation = $('#navigation-dialog'), planDialog = $('#plan-dialog'), sticky = $('.sticky-cta');
 let currentApartment = siteConfig.apartments[0], transitionVersion = 0;
+const planLoads=new Map();
+function preparePlan(apartment){
+ if(!planLoads.has(apartment.id)){
+  const probe=new Image();probe.src=apartment.image;
+  const loading=probe.decode();planLoads.set(apartment.id,loading);
+  loading.catch(()=>{if(planLoads.get(apartment.id)===loading)planLoads.delete(apartment.id);});
+ }
+ return planLoads.get(apartment.id);
+}
+const planWarmup=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){siteConfig.apartments.forEach(apartment=>preparePlan(apartment).catch(()=>{}));planWarmup.disconnect();}},{rootMargin:'400px'});
+planWarmup.observe($('#apartments'));
 const stickyLink = sticky.querySelector('a');
 const contexts = { home:'installments', project:'project', investment:'investment', apartments:'apartment', contact:'general' };
 const sections = [...document.querySelectorAll('main > section')];
@@ -66,8 +77,7 @@ async function selectPlan(id, direction = 1) {
  if (!apartment) return;
  const version = ++transitionVersion;
  if (currentApartment.id === id) { $('#apartment-status').textContent = currentApartment.status; return; }
- const probe = new Image(); probe.src = apartment.image;
- try { await probe.decode(); } catch { if (version === transitionVersion) $('#apartment-status').textContent = 'Не удалось загрузить планировку. Попробуйте переключить ещё раз.'; return; }
+ try { await preparePlan(apartment); } catch { if (version === transitionVersion) $('#apartment-status').textContent = 'Не удалось загрузить планировку. Попробуйте переключить ещё раз.'; return; }
  if (version !== transitionVersion) return;
  const image = $('#apartment-image');
  window.gsap?.killTweensOf(image);
