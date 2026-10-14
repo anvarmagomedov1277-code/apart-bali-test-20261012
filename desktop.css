@@ -18,7 +18,7 @@
  .header-actions{display:none}
  .hero{height:clamp(790px,100svh,1000px);min-height:790px;padding:380px var(--gutter) 60px;display:flex;justify-content:flex-end}
  .hero-scene{inset:0;aspect-ratio:auto;height:100%}.hero-backdrop,.hero-foreground{object-fit:cover}
- .hero-foreground{mask-image:url(assets/facade-wide-mask.svg?v=20261014-media14);-webkit-mask-image:url(assets/facade-wide-mask.svg?v=20261014-media14);mask-size:cover;-webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;pointer-events:none}
+ .hero-foreground{mask-image:url(assets/facade-wide-mask.svg?v=20261014-media15);-webkit-mask-image:url(assets/facade-wide-mask.svg?v=20261014-media15);mask-size:cover;-webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;pointer-events:none}
  .hero-brand{top:78px;left:50%;width:70%;margin-left:-35%;text-align:center;pointer-events:auto}
  .hero-brand>img{display:none}.desktop-wordmark{display:flex;justify-content:center;gap:.06em;font:300 clamp(105px,13vw,250px)/1.1 Unbounded,sans-serif;letter-spacing:-.025em;color:#fff9ec;white-space:nowrap}
  .desktop-wordmark>span{display:inline-block;will-change:transform}

@@ -1,4 +1,4 @@
-import { createDesktopMotion } from './desktop-motion.js?v=20261014-media14';
+import { createDesktopMotion } from './desktop-motion.js?v=20261014-media15';
 
 export const motionIsReduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches&&document.documentElement.dataset.motionOverride!=='full';
 
@@ -27,7 +27,7 @@ export function startMotion() {
   ScrollTrigger.refresh();
   if(reduced){root.dataset.fx='reduced';return;}
   try{
-   const {createLightField}=await import('./fx.js?v=20261014-media14');
+   const {createLightField}=await import('./fx.js?v=20261014-media15');
    const result=await createLightField({active:()=>version===revision&&root.dataset.motion==='full',layer:document.querySelector('#fx-layer')});
    if(version!==revision){result?.dispose();return;}effect=result;
   }catch{root.dataset.fx='fallback';}
