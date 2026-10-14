@@ -133,7 +133,7 @@ main>section,.year-round-story,.year-round-copy,.management{position:relative;is
 .button::before{content:"";position:absolute;inset:0;transform:translateX(-130%) skewX(-18deg);background:linear-gradient(90deg,transparent,#fff8dc66,transparent);pointer-events:none}
 html[data-motion="full"] .button.is-motion-visible::before{animation:control-sweep 4.8s ease-in-out infinite}
 html[data-motion="full"] .button.is-motion-hover::before{animation:control-sweep .8s ease-out infinite}
-.icon-button,.area-choice{position:relative;transition:background-color .25s,color .25s}
+.icon-button:not(.zoom-button),.area-choice{position:relative;transition:background-color .25s,color .25s}
 .icon-button.is-motion-hover{background:#899ab125}.area-choice.is-motion-hover{background:#7946280c}
 .menu-button span{transition:transform .25s,width .25s}.menu-button.is-motion-hover span:last-child{width:22px;transform:translateX(2px)}
 html[data-page-visibility="hidden"] .button::before{animation-play-state:paused!important}
