@@ -1,6 +1,10 @@
 /* Wide composition. Content and apartment selection are shared with mobile. */
 .desktop-wordmark{display:none}
 @media(min-width:768px){
+ .desktop-copy{display:inline}.mobile-copy{display:none}
+ .whatsapp-button>svg:first-child{display:none}
+ .project-gallery{padding:80px var(--gutter) 90px}.gallery-heading{display:grid;grid-template-columns:1.1fr 1fr;column-gap:70px}.gallery-eyebrow{grid-column:1/-1;font-size:11px}.gallery-heading .section-intro{margin:0;align-self:center;font-size:16px}.gallery-tools{margin-top:32px;font-size:12px}.gallery-tile{flex-basis:60%;height:450px}.gallery-tile:last-child{flex-basis:28%;max-width:340px}.gallery-tile-caption{font-size:24px;padding:65px 30px 28px}.gallery-note{font-size:12px}
+ .apartments .apartment-selector{max-width:960px}.apartments .apartment-stage{background:#e9e5df}.apartments .apartment-summary{display:flex;flex-direction:column;gap:0;text-align:center;max-width:900px}.apartments #apartment-features{justify-content:center}.apartment-prices{width:100%;grid-template-columns:1fr 1fr;margin-top:28px}.price-option{text-align:center;padding:25px}.price-option+.price-option{border-top:0;border-left:1px solid #c2b7a8}.price-option p{font-size:14px}.price-option strong{font-size:36px}.price-option>span{font-size:13px}.apartments #select-apartment{width:min(100%,440px);margin:28px auto 0}.lead-dialog .button{min-height:58px}
  :root{--width:1920px;--gutter:clamp(40px,6vw,120px);scroll-padding-top:24px}
  .site-shell{width:100%;max-width:1920px}.section-pad{padding:90px var(--gutter)}
  h2{font-size:clamp(36px,4vw,60px)}h3{font-size:clamp(30px,3vw,44px)}
@@ -14,7 +18,7 @@
  .header-actions{display:none}
  .hero{height:clamp(790px,100svh,1000px);min-height:790px;padding:380px var(--gutter) 60px;display:flex;justify-content:flex-end}
  .hero-scene{inset:0;aspect-ratio:auto;height:100%}.hero-backdrop,.hero-foreground{object-fit:cover}
- .hero-foreground{mask-image:url(assets/facade-wide-mask.svg?v=20261013-scenes9);-webkit-mask-image:url(assets/facade-wide-mask.svg?v=20261013-scenes9);mask-size:cover;-webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;pointer-events:none}
+ .hero-foreground{mask-image:url(assets/facade-wide-mask.svg?v=20261014-media13);-webkit-mask-image:url(assets/facade-wide-mask.svg?v=20261014-media13);mask-size:cover;-webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;pointer-events:none}
  .hero-brand{top:78px;left:50%;width:70%;margin-left:-35%;text-align:center;pointer-events:auto}
  .hero-brand>img{display:none}.desktop-wordmark{display:flex;justify-content:center;gap:.06em;font:300 clamp(105px,13vw,250px)/1.1 Unbounded,sans-serif;letter-spacing:-.025em;color:#fff9ec;white-space:nowrap}
  .desktop-wordmark>span{display:inline-block;will-change:transform}

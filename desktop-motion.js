@@ -79,7 +79,7 @@ export function createDesktopMotion({gsap,ScrollTrigger,SplitText,desktop=true,r
  const hover=matchMedia('(hover:hover) and (pointer:fine)');
  const controlObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>entry.target.classList.toggle('is-motion-visible',entry.isIntersecting));syncLoops();});
  off.push(()=>controlObserver.disconnect());
- document.querySelectorAll('.button,.text-link,.icon-button,.area-choice').forEach(control=>{
+ document.querySelectorAll('.button,.text-link,.icon-button,.area-choice,.gallery-tile').forEach(control=>{
   control.dataset.motionControl='animated';
   if(!reduced&&!control.closest('.hero,.sticky-cta,dialog'))scene(control,gsap.timeline({paused:true}).fromTo(control,{y:26,opacity:.3},{y:0,opacity:1,duration:.5,ease:'power3.out'}),'control-arrival');
   let pressed=false;
