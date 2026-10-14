@@ -1,4 +1,4 @@
-import { siteConfig } from './site-config.js?v=20261014-media15';
+import { siteConfig } from './site-config.js?v=20261015-telegram2';
 
 export function whatsappMessage(context, apartment = siteConfig.apartments[0]) {
   switch (context) {

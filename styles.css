@@ -146,6 +146,7 @@ html[data-page-visibility="hidden"] .button::before{animation-play-state:paused!
 
 /* Original media: contained plans on paper, a browsable architectural gallery. */
 .desktop-copy{display:none}
+ #lead-form button:disabled{cursor:wait;opacity:.65}#lead-form input[readonly]{opacity:.8}
 .project-gallery{background:var(--deep);padding-block:56px 64px}
 .gallery-eyebrow{font-size:10px;letter-spacing:.18em;color:var(--apricot);margin-bottom:16px}
 .gallery-heading .section-intro{max-width:600px;font-size:14px}

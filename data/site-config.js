@@ -1,10 +1,11 @@
 // Только публичные сведения. Источники — во внутренней библиотеке.
 export const siteConfig = {
-  mode: 'public-test', updatedAt: '2026-10-14', name: 'БАЛИ', location: 'Зеленоморск, Дагестан',
-  assetVersion: '20261014-media15',
+  mode: 'public-test', updatedAt: '2026-10-15', name: 'БАЛИ', location: 'Зеленоморск, Дагестан',
+  assetVersion: '20261015-telegram2',
   publicUrl: 'https://anvarmagomedov1277-code.github.io/apart-bali-test-20261012/',
   offer: { firstPayment: 500000, ownPercent: 70 },
   contact: { whatsapp: '79887760404', phoneDisplay: '+7 988 776-04-04', instagram: 'apart_bali' },
+  leads: { endpoint:'https://bali-telegram-leads-20261015.azurechub6.chatgpt.site/api/leads' }, // Only the HTTPS API address is public; never bot credentials.
   project: { buildings: 18, floors: '8–12', apartments: 2244, area: 76000 },
   investment: { monthlyMin: 80000, monthlyMax: 150000, resaleGrowth: 2000000, status: 'forecast' },
   pricing: { cashPerSquare:85000, installmentPerSquare:95000 },

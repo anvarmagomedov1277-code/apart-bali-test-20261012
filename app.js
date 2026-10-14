@@ -1,7 +1,7 @@
-import { siteConfig } from './data/site-config.js?v=20261014-media15';
-import { startMotion, motionIsReduced } from './motion.js?v=20261014-media15';
-import { whatsappUrl } from './data/whatsapp.js?v=20261014-media15';
-import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261014-media15';
+import { siteConfig } from './data/site-config.js?v=20261015-telegram2';
+import { startMotion, motionIsReduced } from './motion.js?v=20261015-telegram2';
+import { whatsappUrl } from './data/whatsapp.js?v=20261015-telegram2';
+import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261015-telegram2';
 
 const $ = selector => document.querySelector(selector);
 const reducedMotion = motionIsReduced;
@@ -135,7 +135,17 @@ let scrollPending=false;
 window.addEventListener('scroll',()=>{if(scrollPending)return;scrollPending=true;requestAnimationFrame(()=>{updateContext();scrollPending=false;});},{passive:true});
 window.addEventListener('resize',updateContext);
 
-// Desktop uses a local form preview; mobile follows the existing native WhatsApp href.
+// Desktop submits only to a configured server; mobile follows native WhatsApp href.
+let leadEndpoint=siteConfig.leads?.endpoint||'',leadEpoch=0,leadRequestId=null,lastLeadPayload='',leadSending=false;
+if(leadEndpoint){try{const endpoint=new URL(leadEndpoint,location.href);if(endpoint.protocol!=='https:'||endpoint.username||endpoint.password)leadEndpoint='';}catch{leadEndpoint='';}}
+function showDeliveryAvailability(){
+ $('#lead-notice').textContent=leadEndpoint?'Оставьте контакты — менеджер свяжется с вами.':'Тестовая форма. Отправка заявок пока не подключена.';
+ const hint=$('.contact-hint .desktop-copy');if(hint)hint.textContent=leadEndpoint?'Оставьте имя и телефон — менеджер свяжется с вами.':'Оставьте имя и телефон в удобном окне. Доставка заявок будет подключена позже.';
+}
+showDeliveryAvailability();
+if(!leadEndpoint&&['127.0.0.1','localhost'].includes(location.hostname)){
+ fetch('/api/lead-status',{cache:'no-store'}).then(response=>response.ok?response.json():null).then(status=>{if(status?.ready){leadEndpoint='/api/leads';showDeliveryAvailability();}}).catch(()=>{});
+}
 const leadTitles={installments:'Дубайская рассрочка',project:'Презентация комплекса',investment:'Инвестиционный расчёт',apartment:'Расчёт апартамента',general:'Персональное предложение'};
 function configureCapture(){document.querySelectorAll('[data-wa-context]').forEach(link=>{
  if(desktopCapture.matches){link.setAttribute('aria-haspopup','dialog');link.setAttribute('aria-controls','lead-dialog');}
@@ -144,24 +154,42 @@ function configureCapture(){document.querySelectorAll('[data-wa-context]').forEa
 document.querySelectorAll('[data-wa-context]').forEach(link=>link.addEventListener('click',event=>{
  if(!desktopCapture.matches||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
  event.preventDefault();const context=link.dataset.waContext;
+ leadEpoch++;leadRequestId=null;lastLeadPayload='';showDeliveryAvailability();
  $('#lead-title').textContent=leadTitles[context]||leadTitles.general;
  const prices=apartmentPrices(currentApartment);
  $('#lead-description').textContent=context==='apartment'?currentApartment.title+'. Полная оплата — '+formatMoney(prices.cash)+'; дубайская рассрочка — '+formatMoney(prices.installments)+'.':'Укажите имя и номер телефона для выбранного предложения.';
- leadDialog.dataset.context=context;openDialog(leadDialog);$('#lead-name').focus({preventScroll:true});
+ leadDialog.dataset.context=context;leadDialog.dataset.apartmentId=currentApartment.id;openDialog(leadDialog);$('#lead-name').focus({preventScroll:true});
 }));
 desktopCapture.addEventListener('change',configureCapture);configureCapture();
 const leadForm=$('#lead-form');
 function clearLeadErrors(){for(const field of ['name','phone']){$('#lead-'+field+'-error').textContent='';$('#lead-'+field).removeAttribute('aria-invalid');}$('#lead-status').textContent='';}
-leadDialog.addEventListener('close',()=>{leadForm.reset();clearLeadErrors();delete leadDialog.dataset.context;});
-leadForm.addEventListener('input',clearLeadErrors);
-leadForm.addEventListener('submit',event=>{
+function setLeadBusy(busy){leadSending=busy;leadForm.querySelector('button').disabled=busy;leadForm.querySelectorAll('input').forEach(input=>input.readOnly=busy);leadForm.setAttribute('aria-busy',String(busy));}
+leadDialog.addEventListener('close',()=>{leadEpoch++;leadForm.reset();clearLeadErrors();setLeadBusy(false);delete leadDialog.dataset.context;delete leadDialog.dataset.apartmentId;leadRequestId=null;lastLeadPayload='';});
+leadForm.addEventListener('input',()=>{clearLeadErrors();leadRequestId=null;});
+leadForm.addEventListener('submit',async event=>{
+ if(leadSending){event.preventDefault();return;}
  event.preventDefault();clearLeadErrors();let firstInvalid=null;
  const invalidate=(field,message)=>{$('#lead-'+field+'-error').textContent=message;$('#lead-'+field).setAttribute('aria-invalid','true');firstInvalid||=$('#lead-'+field);};
  if(!$('#lead-name').value.trim())invalidate('name','Укажите ваше имя.');
  const phone=$('#lead-phone').value.trim(),digits=phone.replace(/\D/g,'');
  if(!/^[+\d\s().-]+$/.test(phone)||digits.length<10||digits.length>15)invalidate('phone','Введите номер телефона с кодом страны, от 10 до 15 цифр.');
  if(firstInvalid){firstInvalid.focus();return;}
- $('#lead-status').textContent='Данные заполнены корректно. Отправка пока не подключена — заявка не отправлена. Для связи позвоните по номеру ниже.';
+ if(!leadEndpoint){$('#lead-status').textContent='Данные заполнены корректно. Отправка пока не подключена — заявка не отправлена. Для связи позвоните по номеру ниже.';return;}
+ const payload={name:$('#lead-name').value.trim(),phone,context:leadDialog.dataset.context,...(leadDialog.dataset.context==='apartment'?{apartmentId:leadDialog.dataset.apartmentId}:{})};
+ const serialized=JSON.stringify(payload);if(!leadRequestId||serialized!==lastLeadPayload){leadRequestId=crypto.randomUUID();lastLeadPayload=serialized;}
+ const epoch=leadEpoch;setLeadBusy(true);$('#lead-status').textContent='Отправляем заявку…';
+ try{
+  const ticketUrl=new URL('/api/lead-ticket',new URL(leadEndpoint,location.href));
+  ticketUrl.searchParams.set('request_id',leadRequestId);
+  const ticketResponse=await fetch(ticketUrl,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(10000)});
+  const ticketData=await ticketResponse.json();if(!ticketResponse.ok)throw Error('Lead session unavailable');
+  const response=await fetch(leadEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'omit',body:JSON.stringify({...payload,requestId:leadRequestId,ticket:ticketData.ticket}),signal:AbortSignal.timeout(15000)});
+  const result=await response.json();if(epoch!==leadEpoch)return;
+  if(!response.ok||result.ok!==true){$('#lead-status').textContent=response.status===429?'Слишком много попыток. Подождите минуту и повторите.':result.error==='delivery_unconfirmed'?'Доставку пока не удалось подтвердить. Для связи позвоните по номеру ниже.':'Не удалось отправить заявку. Контакты сохранены в форме — попробуйте ещё раз или позвоните.';return;}
+  $('#lead-status').textContent='Заявка отправлена. Менеджер свяжется с вами.';
+  leadForm.querySelectorAll('input').forEach(input=>{input.value='';});lastLeadPayload='';leadRequestId=null;
+ }catch{if(epoch===leadEpoch)$('#lead-status').textContent='Не удалось подтвердить отправку. Проверьте интернет или позвоните по номеру ниже.';}
+ finally{if(epoch===leadEpoch)setLeadBusy(false);}
 });
 
 // Full-resolution gallery, with a version guard against rapid navigation.
