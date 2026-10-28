@@ -18,7 +18,7 @@
  .header-actions{display:none}
  .hero{height:clamp(790px,100svh,1000px);min-height:790px;padding:380px var(--gutter) 60px;display:flex;justify-content:flex-end}
  .hero-scene{inset:0;aspect-ratio:auto;height:100%}.hero-backdrop,.hero-foreground{object-fit:cover}
- .hero-foreground{mask-image:url(assets/facade-wide-mask.svg?v=20261028-mobile1);-webkit-mask-image:url(assets/facade-wide-mask.svg?v=20261028-mobile1);mask-size:cover;-webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;pointer-events:none}
+ .hero-foreground{mask-image:url(assets/facade-wide-mask.svg?v=20261028-desktop1);-webkit-mask-image:url(assets/facade-wide-mask.svg?v=20261028-desktop1);mask-size:cover;-webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;pointer-events:none}
  .hero-brand{top:78px;left:50%;width:70%;margin-left:-35%;text-align:center;pointer-events:auto}
  .hero-brand>img{display:none}.desktop-wordmark{display:flex;justify-content:center;gap:.06em;font:300 clamp(105px,13vw,250px)/1.1 Unbounded,sans-serif;letter-spacing:-.025em;color:#fff9ec;white-space:nowrap}
  .desktop-wordmark>span{display:inline-block;will-change:transform}
@@ -97,4 +97,58 @@
  .year-round-copy{padding:35px 35px}.pool-window{height:500px}.management{gap:40px}.management-window{height:400px}.management .text-link{font-size:13px}
  .apartment-viewer{grid-template-columns:52px minmax(0,1fr) 52px;gap:20px}.apartment-stage{height:550px}.apartment-viewer>.icon-button{min-width:52px;min-height:52px}
  .apartment-summary{gap:35px}.contact{column-gap:50px}.contact-direct{flex-direction:column;gap:0}.whatsapp-button{font-size:12px;padding-inline:14px}
+}
+
+/* USER-BRIEF-018: generous hero margins and complete desktop reading panels. */
+@media(min-width:768px){
+ .site-shell{--content-gutter:max(40px,calc((100% - 1320px)/2));--hero-gutter:max(clamp(56px,8vw,160px),calc((100% - 1240px)/2))}
+ .site-header{padding-inline:var(--hero-gutter)}.header-contacts{right:var(--hero-gutter)}
+ .desktop-navigation{gap:clamp(20px,2.4vw,40px);padding-right:210px}
+ .hero{height:100svh;min-height:640px;padding:clamp(300px,39svh,390px) var(--hero-gutter) 64px}
+ .hero-offer{width:380px;max-width:45%}.hero-offer h2{font-size:clamp(36px,3.2vw,48px)}
+ .hero-investment{left:var(--hero-gutter);bottom:104px;font-size:clamp(20px,1.7vw,28px)}
+ .hero .scroll-hint{left:var(--hero-gutter);bottom:20px}
+ .project{min-height:100svh;padding:clamp(24px,4svh,44px) var(--content-gutter);grid-template-columns:minmax(240px,.8fr) minmax(0,1.6fr);grid-template-rows:1fr auto auto;gap:clamp(16px,2.5svh,28px) clamp(32px,4vw,64px);align-items:center}
+ .project-heading{padding:0;align-self:center}.project-heading h2{font-size:clamp(28px,2.6vw,42px)}
+ .project-heading .section-intro{margin-top:18px;font-size:15px;line-height:1.75;max-width:390px}
+ .project-panorama{grid-row:1;align-self:center;justify-self:end;width:min(100%,calc(44svh * 2752 / 1536))}
+ .project .panorama-window{aspect-ratio:2752/1536;height:auto;min-height:0}
+ .project .panorama-image{width:100%;height:100%;object-fit:contain;object-position:center}
+ .project .panorama-caption{padding:34px 18px 14px;font-size:11px}.project .panorama-caption span:first-child{font-size:16px}
+ .project-facts{grid-column:1/-1;grid-row:2;padding:0;display:grid;grid-template-columns:1fr 1.4fr 1.1fr;gap:16px 32px;align-items:center}
+ .project .fact-main{gap:18px}.project .fact-main strong{font-size:64px}.project .fact-main>span{font-size:13px;line-height:1.6}
+ .project .fact-pair{margin:0;padding:0;border:0;gap:24px}.project .fact-pair strong{font-size:28px;line-height:1.4}
+ .project .fact-area{margin:0}.project .fact-area strong{font-size:32px;line-height:1.4}
+ .project .fact-pair span,.project .fact-area>span{font-size:12px}
+ .project .territory-copy{grid-column:1/3;margin:0;max-width:680px;font-size:13px;line-height:1.75}
+ .project .project-whatsapp{grid-column:3;margin:0;max-width:none;min-height:54px;padding:14px 16px;font-size:12px}
+ .project-ribbon{grid-row:3;margin:0;padding:0}.project .ribbon-track{font-size:26px;line-height:1.25;gap:40px}
+ .apartments{min-height:100svh;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(250px,.8fr);grid-template-rows:auto auto minmax(300px,1fr) auto;padding:clamp(24px,4svh,44px) var(--content-gutter);gap:16px 40px}
+ .apartments-heading{grid-column:1/-1;margin:0;max-width:none;text-align:left}.apartments-heading h2{font-size:clamp(28px,2.7vw,40px);line-height:1.3}
+ .apartments .apartment-selector{grid-column:1/-1;max-width:none;width:100%;margin:0;padding-bottom:4px;scrollbar-width:thin}
+ .apartments .area-choice{flex:1 0 72px;min-height:46px;padding:8px 5px;font-size:18px;line-height:1.5}
+ .apartments .area-choice span{font-size:11px}
+ .apartments .apartment-viewer{grid-column:1;grid-row:3;grid-template-columns:44px minmax(0,1fr) 44px;gap:12px;max-width:none;width:100%;height:100%;min-height:300px;margin:0}
+ .apartments .apartment-viewer>.icon-button{min-width:44px;min-height:48px;padding:10px}
+ .apartments .apartment-stage{height:100%;min-height:300px;align-self:stretch}
+ .apartments .plan-drag{position:absolute;inset:0}.apartments .plan-drag img{padding:12px}
+ .apartments .zoom-button{right:12px;bottom:12px}
+ .apartments .plan-navigation{grid-column:1;grid-row:4;margin:0;min-height:20px;line-height:1.5}
+ .apartments .apartment-summary{grid-column:2;grid-row:3/5;align-self:center;display:flex;flex-direction:column;align-items:stretch;gap:0;max-width:none;width:100%;min-width:0;margin:0;text-align:left}
+ .apartments .apartment-info h3{font-size:24px;line-height:1.35}
+ .apartments #apartment-features{justify-content:flex-start;gap:6px 16px;margin:12px 0 0;font-size:13px;line-height:1.6}
+ .apartments .apartment-prices{grid-template-columns:1fr;margin-top:22px}
+ .apartments .price-option{text-align:left;padding:12px 0}.apartments .price-option+.price-option{border-left:0;border-top:1px solid #c2b7a8}
+ .apartments .price-option p{font-size:13px;line-height:1.5}.apartments .price-option strong{font-size:28px;line-height:1.3;margin:4px 0}.apartments .price-option>span{font-size:12px;line-height:1.5}
+ .apartments #select-apartment{width:100%;max-width:none;margin:22px 0 0;min-height:54px;padding:14px 18px;font-size:13px}
+}
+@media(min-width:768px) and (max-height:760px){
+ .hero{padding-top:280px}.hero-offer h2{font-size:38px}.hero-benefit{font-size:15px;margin-top:12px}.hero-benefit strong{font-size:20px}.hero-capital{font-size:13px;margin-top:14px;padding-top:12px}.hero-offer .button{margin-top:16px}
+ .hero-brand{top:60px}.hero-description{top:235px}
+ .project-heading .section-intro{font-size:14px;line-height:1.65}
+}
+@media(min-width:768px) and (max-width:1100px){
+ .desktop-navigation{gap:18px;padding-right:155px}.apartments{column-gap:28px}
+ .project-facts{gap:16px 24px;grid-template-columns:1fr 1.25fr 1fr}.project .fact-main{gap:12px}.project .fact-main strong{font-size:54px}.project .fact-main>span{font-size:12px}.project .fact-area strong{font-size:28px}
+ .project .project-whatsapp{font-size:11px;padding-inline:12px}.project .project-whatsapp svg{width:20px}
 }

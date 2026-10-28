@@ -1,7 +1,7 @@
-import { siteConfig } from './data/site-config.js?v=20261028-mobile1';
-import { startMotion, motionIsReduced } from './motion.js?v=20261028-mobile1';
-import { whatsappUrl } from './data/whatsapp.js?v=20261028-mobile1';
-import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261028-mobile1';
+import { siteConfig } from './data/site-config.js?v=20261028-desktop1';
+import { startMotion, motionIsReduced } from './motion.js?v=20261028-desktop1';
+import { whatsappUrl } from './data/whatsapp.js?v=20261028-desktop1';
+import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261028-desktop1';
 
 const $ = selector => document.querySelector(selector);
 const reducedMotion = motionIsReduced;
@@ -30,11 +30,13 @@ function updateContext() {
  stickyLink.dataset.waContext = contexts[section.id];
  stickyLink.href = whatsappUrl(contexts[section.id], currentApartment);
  stickyLink.querySelector('span').textContent = section.id === 'apartments' ? 'Получить расчёт ' + currentApartment.area + ' м²' : section.id === 'investment' ? 'Получить инвестиционный расчёт' : ['project','gallery'].includes(section.id) ? 'Получить презентацию комплекса' : 'Получить подробные условия';
+ updateSticky();
 }
 let heroVisible = true, contactVisible = false;
 function updateSticky() {
  const focused = ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName);
- sticky.hidden = !desktopCapture.matches || heroVisible || contactVisible || dialogs.some(dialog=>dialog.open) || focused;
+ const compactPanel=sections.some(section=>{if(!['project','apartments'].includes(section.id))return false;const rect=section.getBoundingClientRect();return rect.top<innerHeight&&rect.bottom>0;});
+ sticky.hidden = !desktopCapture.matches || compactPanel || heroVisible || contactVisible || dialogs.some(dialog=>dialog.open) || focused;
 }
 for (const dialog of dialogs) {
  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());

@@ -10,7 +10,7 @@ export function createDesktopMotion({gsap,ScrollTrigger,SplitText,desktop=true,r
   const play=()=>{node.dataset.motionRuns=String(Number(node.dataset.motionRuns||0)+1);tl.timeScale(1).restart();};
   const exit=()=>tl.timeScale(1.8).reverse();
   // The compact mobile picker is read as one panel, including its top and bottom.
-  const trigger=(!desktop&&node.closest('#apartments'))||(node.classList.contains('zoom-button')&&node.closest('.apartment-stage'))||node;
+  const trigger=node.closest(desktop?'#project,#apartments':'#apartments')||(node.classList.contains('zoom-button')&&node.closest('.apartment-stage'))||node;
   tl.scrollTrigger=ScrollTrigger.create({trigger,animation:tl,start:'top 85%',end:'bottom 10%',onEnter:play,onEnterBack:play,onLeave:exit,onLeaveBack:exit});
   const rect=trigger.getBoundingClientRect();if(rect.top<innerHeight*.85&&rect.bottom>innerHeight*.1&&!node.dataset.motionRuns)play();
   return tl;
@@ -67,13 +67,16 @@ export function createDesktopMotion({gsap,ScrollTrigger,SplitText,desktop=true,r
   if(!reduced)gsap.to(state,{value,duration:.9,ease:'power3.out',onUpdate(){counter.textContent=format.format(Math.round(state.value));},scrollTrigger:{trigger:counter,start:'top 95%',once:true}});
  });
  if(!reduced){
-  for(const [selector,trigger] of [['.panorama-image','.project-panorama'],['.pool-image','.year-round-story'],['.management-image','.management-visual']])gsap.fromTo(selector,{yPercent:-12,scale:1.12},{yPercent:0,scale:1,ease:'none',scrollTrigger:link(trigger)});
+  for(const [selector,trigger] of [['.panorama-image','.project-panorama'],['.pool-image','.year-round-story'],['.management-image','.management-visual']]){
+   if(desktop&&selector==='.panorama-image')continue;
+   gsap.fromTo(selector,{yPercent:-12,scale:1.12},{yPercent:0,scale:1,ease:'none',scrollTrigger:link(trigger)});
+  }
   const ribbon=document.querySelector('.ribbon-track'),gap=parseFloat(getComputedStyle(ribbon).gap)||30;
   addLoop(gsap.to(ribbon,{x:()=>-(ribbon.scrollWidth+gap)/2,duration:22,repeat:-1,ease:'none',paused:true}),document.querySelector('.project'));
   document.querySelectorAll('.capital-light').forEach(field=>addLoop(gsap.fromTo(field.querySelectorAll('i'),{xPercent:-160,opacity:.25},{xPercent:160,opacity:.9,duration:4.5,stagger:.6,repeat:-1,yoyo:true,ease:'sine.inOut',paused:true}),field.closest('.investment-scenario')));
   document.querySelectorAll('.panorama-window,.pool-window,.management-window').forEach((window,index)=>{
    scene(window,gsap.timeline({paused:true}).fromTo(window,{x:index%2?-65:65,opacity:.25,clipPath:'inset(8% 100% 8% 0)'},{x:0,opacity:1,clipPath:'inset(0% 0% 0% 0)',duration:.75,ease:'power3.out'}),'photo-unfold');
-   addLoop(gsap.to(window,{scale:1.025,duration:5,repeat:-1,yoyo:true,paused:true,ease:'sine.inOut'}),window.closest('.project-panorama,.year-round-story,.management'));
+   if(!desktop||!window.classList.contains('panorama-window'))addLoop(gsap.to(window,{scale:1.025,duration:5,repeat:-1,yoyo:true,paused:true,ease:'sine.inOut'}),window.closest('.project-panorama,.year-round-story,.management'));
   });
   const stage=document.querySelector('.apartment-stage');
   scene(stage,gsap.timeline({paused:true}).fromTo(stage,{y:70,scale:.88,opacity:0},{y:0,scale:1,opacity:1,duration:.7,ease:'power3.out'}),'plan-arrival');
