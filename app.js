@@ -1,7 +1,7 @@
-import { siteConfig } from './data/site-config.js?v=20261015-telegram2';
-import { startMotion, motionIsReduced } from './motion.js?v=20261015-telegram2';
-import { whatsappUrl } from './data/whatsapp.js?v=20261015-telegram2';
-import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261015-telegram2';
+import { siteConfig } from './data/site-config.js?v=20261028-mobile1';
+import { startMotion, motionIsReduced } from './motion.js?v=20261028-mobile1';
+import { whatsappUrl } from './data/whatsapp.js?v=20261028-mobile1';
+import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261028-mobile1';
 
 const $ = selector => document.querySelector(selector);
 const reducedMotion = motionIsReduced;
@@ -34,7 +34,7 @@ function updateContext() {
 let heroVisible = true, contactVisible = false;
 function updateSticky() {
  const focused = ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName);
- sticky.hidden = heroVisible || contactVisible || dialogs.some(dialog=>dialog.open) || focused;
+ sticky.hidden = !desktopCapture.matches || heroVisible || contactVisible || dialogs.some(dialog=>dialog.open) || focused;
 }
 for (const dialog of dialogs) {
  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
@@ -62,8 +62,7 @@ function updateApartment(apartment) {
  image.width=apartment.width;image.height=apartment.height;
  image.alt = 'Планировка: ' + apartment.title.toLowerCase();
  $('#apartment-title').textContent = apartment.title;
- $('#apartment-description').textContent = apartment.description;
- $('#apartment-status').textContent = apartment.status;
+ $('#apartment-status').textContent = '';
  $('#apartment-features').replaceChildren(...apartment.features.map(text=>{const item=document.createElement('li');item.textContent=text;return item;}));
  $('#plan-position').textContent = (index + 1) + ' / ' + siteConfig.apartments.length;
  document.querySelectorAll('[data-apartment]').forEach(button => {
@@ -86,7 +85,7 @@ async function selectPlan(id, direction = 1) {
  if (!apartment) return;
  requestedPlanId=id;
  const version = ++transitionVersion;
- if (currentApartment.id === id) { $('#apartment-status').textContent = currentApartment.status; return; }
+ if (currentApartment.id === id) { $('#apartment-status').textContent = ''; return; }
  try { await preparePlan(apartment); } catch { if (version === transitionVersion) {requestedPlanId=currentApartment.id;$('#apartment-status').textContent = 'Не удалось загрузить планировку. Попробуйте переключить ещё раз.';} return; }
  if (version !== transitionVersion) return;
  const image = $('#apartment-image');
@@ -122,7 +121,7 @@ $('.zoom-button').addEventListener('click',()=>{
  $('#plan-dialog-image').src=currentApartment.image;
  $('#plan-dialog-image').width=currentApartment.width;$('#plan-dialog-image').height=currentApartment.height;
  $('#plan-dialog-image').alt='Увеличенная планировка: '+currentApartment.title.toLowerCase();
- $('#plan-dialog-caption').textContent=currentApartment.status;
+ $('#plan-dialog-caption').textContent=currentApartment.features.join(' · ');
  openDialog(planDialog);
 });
 const observer=new IntersectionObserver(entries=>{
@@ -133,7 +132,7 @@ observer.observe($('#home')); observer.observe($('#contact'));
 $('.apartment-stage').addEventListener('pointercancel',()=>{pointerStart=null;});
 let scrollPending=false;
 window.addEventListener('scroll',()=>{if(scrollPending)return;scrollPending=true;requestAnimationFrame(()=>{updateContext();scrollPending=false;});},{passive:true});
-window.addEventListener('resize',updateContext);
+window.addEventListener('resize',()=>{updateContext();updateSticky();});
 
 // Desktop submits only to a configured server; mobile follows native WhatsApp href.
 let leadEndpoint=siteConfig.leads?.endpoint||'',leadEpoch=0,leadRequestId=null,lastLeadPayload='',leadSending=false;

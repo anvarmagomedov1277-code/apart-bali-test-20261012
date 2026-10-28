@@ -19,7 +19,7 @@ main,footer{position:relative;z-index:2}.section-pad{padding:68px 24px}.section-
 .button-outline{border:1px solid var(--sand);background:transparent;color:var(--chalk)}.button-outline:hover{background:#8c9bad18}
 .button:active{transform:translateY(1px)}.text-link{display:inline-flex;align-items:center;justify-content:space-between;gap:14px;color:var(--sand);min-height:48px;border-bottom:1px solid currentColor;padding:12px 0;font-size:13px;text-underline-offset:5px}
 .text-link:hover{color:var(--chalk)}.icon-button{display:grid;place-content:center;min-width:44px;min-height:44px;padding:10px;border:0;background:none;color:inherit}.icon-button:hover{color:var(--sand)}
-.skip-link{position:fixed;z-index:100;top:10px;left:10px;padding:12px;background:var(--apricot);color:var(--ink);transform:translateY(-150%)}.skip-link:focus{transform:none}
+.skip-link{position:fixed;z-index:100;top:10px;left:10px;padding:0;background:var(--apricot);color:var(--ink);clip-path:inset(50%);width:1px;height:1px;overflow:hidden;white-space:nowrap}.skip-link:focus-visible{clip-path:none;width:auto;height:auto;padding:12px;white-space:normal}
 .site-header{position:absolute;z-index:8;inset:0 0 auto;padding:14px 18px 10px 24px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .header-location,.desktop-navigation{display:none}.header-actions{position:absolute;left:14px;top:14px;display:flex}
 .header-contacts{position:absolute;right:18px;top:10px;display:flex;flex-direction:column;align-items:flex-end}
@@ -150,7 +150,7 @@ html[data-page-visibility="hidden"] .button::before{animation-play-state:paused!
 .project-gallery{background:var(--deep);padding-block:56px 64px}
 .gallery-eyebrow{font-size:10px;letter-spacing:.18em;color:var(--apricot);margin-bottom:16px}
 .gallery-heading .section-intro{max-width:600px;font-size:14px}
-.gallery-tools{display:flex;justify-content:space-between;align-items:center;margin-top:22px;font-size:11px;color:var(--sage)}.gallery-tools>div{display:flex;gap:8px}.gallery-tools .icon-button{border:1px solid var(--line)}
+.gallery-tools{display:flex;justify-content:flex-end;align-items:center;margin-top:22px;font-size:11px;color:var(--sage)}.gallery-tools>div{display:flex;gap:8px}.gallery-tools .icon-button{border:1px solid var(--line)}
 .gallery-rail{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;padding:20px 2px 16px;margin-inline:-2px;overscroll-behavior-x:contain}
 .gallery-tile{position:relative;flex:0 0 88%;height:340px;border:0;padding:0;text-align:left;color:var(--paper);background:var(--slate);overflow:hidden;border-radius:3px;scroll-snap-align:start}
 .gallery-tile img{width:100%;height:100%;object-fit:cover;transition:transform .6s,filter .6s}.gallery-tile:hover img{transform:scale(1.04);filter:brightness(1.08)}
@@ -167,3 +167,47 @@ html[data-page-visibility="hidden"] .button::before{animation-play-state:paused!
 .plan-dialog>img{background:#e9e5df;padding:10px}
 .lead-dialog{max-width:520px;width:calc(100% - 32px);border:1px solid #61748a;border-radius:4px}.lead-eyebrow{font-size:9px;letter-spacing:.12em;color:var(--apricot)}.lead-content{padding:0 28px 30px}.lead-content h2{font-size:28px;line-height:1.4}.lead-content>p{font-size:13px;color:var(--sage);margin-top:15px}.lead-content>.lead-notice{background:var(--deep);padding:12px;border-left:2px solid var(--apricot);font-size:12px;color:var(--paper)}
 #lead-form{margin-top:22px}#lead-form label{display:block;font-size:13px;margin-top:16px}#lead-form input{width:100%;height:54px;padding:12px 14px;margin-top:7px;border:1px solid #6a7e94;border-radius:3px;background:var(--deep);color:var(--paper);color-scheme:dark;font-size:16px}#lead-form input::placeholder{color:#a4b1c2}#lead-form input:focus-visible{outline:2px solid var(--apricot);outline-offset:2px}#lead-form input[aria-invalid=true]{border-color:#ffbaad}.field-error{color:#ffbaad;font-size:12px;min-height:0;margin-top:6px}.field-error:empty{display:none}#lead-form .button{margin-top:24px}#lead-status{font-size:13px;color:var(--apricot);margin-top:16px}#lead-status:empty{display:none}.lead-phone{display:inline-flex;align-items:center;min-height:44px;font-size:13px;margin-top:15px;color:var(--apricot);text-decoration:underline;text-underline-offset:4px}
+
+/* A small viewport includes expanded browser bars; content can grow for large text. */
+#apartment-status:empty{display:none}
+@media(max-width:767px){
+ .sticky-cta{display:none!important}
+ .hero{display:flex;flex-direction:column;min-height:100svh;padding:clamp(268px,45svh,370px) 24px max(12px,env(safe-area-inset-bottom));}
+ .hero-description{top:clamp(174px,28svh,202px);font-size:10px}
+ .hero-investment{top:clamp(218px,35svh,285px);left:24px;font-size:clamp(14px,2.3svh,16px);line-height:1.45}
+ .hero-offer h2{font-size:clamp(28px,5svh,38px);line-height:1.14}
+ .hero-benefit{margin-top:8px;font-size:14px;line-height:1.5}.hero-benefit strong{font-size:17px}
+ .hero-offer .button{margin-top:12px;min-height:52px;padding-block:14px}
+ .hero-capital{margin-top:12px;padding-top:10px;font-size:12px;line-height:1.4}
+ .hero .scroll-hint{margin-top:auto;padding-top:4px;min-height:44px}
+ .apartments{display:grid;grid-template-rows:auto auto minmax(180px,1fr) auto auto;min-height:100svh;padding:16px 20px max(16px,env(safe-area-inset-bottom));scroll-margin-top:0}
+ .apartments-heading h2{font-size:clamp(21px,5.5vw,25px);line-height:1.3}
+ .apartment-selector{width:100%;min-width:0;margin:10px 0;padding-bottom:0;scrollbar-width:none}
+ .apartment-selector::-webkit-scrollbar{display:none}
+ .area-choice{flex-basis:82px;min-height:44px;padding:8px 5px;font-size:18px;line-height:1.5}.area-choice span{font-size:11px}
+ .apartment-viewer{grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;margin:0;min-height:180px}
+ .apartment-viewer>.icon-button{min-width:44px;min-height:48px}
+ .apartment-stage{height:100%;min-height:180px;align-self:stretch}
+ .apartment-stage .plan-drag{position:absolute;inset:0}
+ .plan-drag img{padding:8px 6px}
+ .zoom-button{right:6px;bottom:6px;min-width:44px;min-height:44px}
+ .plan-navigation{margin-top:4px;min-height:20px;line-height:1.5}
+ .apartment-summary{margin-top:6px;min-width:0}
+ .apartment-info h3{font-size:18px;line-height:1.3}
+ #apartment-features{gap:2px 12px;margin:5px 0 0;font-size:12px;line-height:1.5}
+ .apartment-prices{grid-template-columns:1fr 1fr;margin-top:8px}
+ .price-option{padding:9px 8px;min-width:0}.price-option+.price-option{border-top:0;border-left:1px solid #c2b7a8}
+ .price-option p{font-size:12px;line-height:1.5;white-space:nowrap}
+ .price-option strong{font-size:clamp(18px,5vw,23px);line-height:1.3;margin:3px 0;white-space:nowrap}
+ .price-option>span{display:block;font-size:11px;line-height:1.5}
+ .apartments #select-apartment{margin-top:10px;min-height:48px;padding:12px 16px;font-size:12px}
+ .site-footer{padding-bottom:max(36px,env(safe-area-inset-bottom))}
+}
+@media(max-width:350px){
+ .hero{padding-inline:20px}.hero-investment{left:20px}.hero-description{width:280px;font-size:9px}
+ .apartments{padding-inline:16px}.price-option{padding-inline:6px}
+}
+@media(max-width:767px) and (max-height:540px){
+ .hero{padding-top:238px}.hero-description{top:168px}.hero-investment{top:208px;font-size:13px;line-height:1.3}
+ .hero-investment br{display:none}.hero-offer h2{font-size:26px}
+}

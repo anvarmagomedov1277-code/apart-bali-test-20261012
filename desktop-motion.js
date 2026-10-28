@@ -9,8 +9,10 @@ export function createDesktopMotion({gsap,ScrollTrigger,SplitText,desktop=true,r
   if(node.closest('.hero'))heroScenes.set(node,tl);
   const play=()=>{node.dataset.motionRuns=String(Number(node.dataset.motionRuns||0)+1);tl.timeScale(1).restart();};
   const exit=()=>tl.timeScale(1.8).reverse();
-  tl.scrollTrigger=ScrollTrigger.create({trigger:node,animation:tl,start:'top 85%',end:'bottom 10%',onEnter:play,onEnterBack:play,onLeave:exit,onLeaveBack:exit});
-  const rect=node.getBoundingClientRect();if(rect.top<innerHeight*.85&&rect.bottom>innerHeight*.1&&!node.dataset.motionRuns)play();
+  // The compact mobile picker is read as one panel, including its top and bottom.
+  const trigger=(!desktop&&node.closest('#apartments'))||(node.classList.contains('zoom-button')&&node.closest('.apartment-stage'))||node;
+  tl.scrollTrigger=ScrollTrigger.create({trigger,animation:tl,start:'top 85%',end:'bottom 10%',onEnter:play,onEnterBack:play,onLeave:exit,onLeaveBack:exit});
+  const rect=trigger.getBoundingClientRect();if(rect.top<innerHeight*.85&&rect.bottom>innerHeight*.1&&!node.dataset.motionRuns)play();
   return tl;
  }
  function splitScene(node,type,name,from){
