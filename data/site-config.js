@@ -1,7 +1,7 @@
 // Только публичные сведения. Источники — во внутренней библиотеке.
 export const siteConfig = {
-  mode: 'public-test', updatedAt: '2026-10-28', name: 'БАЛИ', location: 'Зеленоморск, Дагестан',
-  assetVersion: '20261028-desktop1',
+  mode: 'public-test', updatedAt: '2026-11-01', name: 'БАЛИ', location: 'Зеленоморск, Дагестан',
+  assetVersion: '20261101-admin1',
   publicUrl: 'https://apartcomplexbali.ru/',
   offer: { firstPayment: 500000, ownPercent: 70 },
   contact: { whatsapp: '79887760404', phoneDisplay: '+7 988 776-04-04', instagram: 'apart_bali' },

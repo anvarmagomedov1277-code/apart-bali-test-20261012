@@ -1,7 +1,7 @@
-import { siteConfig } from './data/site-config.js?v=20261028-desktop1';
-import { startMotion, motionIsReduced } from './motion.js?v=20261028-desktop1';
-import { whatsappUrl } from './data/whatsapp.js?v=20261028-desktop1';
-import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261028-desktop1';
+import { siteConfig } from './data/site-config.js?v=20261101-admin1';
+import { startMotion, motionIsReduced } from './motion.js?v=20261101-admin1';
+import { whatsappUrl } from './data/whatsapp.js?v=20261101-admin1';
+import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261101-admin1';
 
 const $ = selector => document.querySelector(selector);
 const reducedMotion = motionIsReduced;
@@ -151,10 +151,11 @@ const leadTitles={installments:'Дубайская рассрочка',project:'
 function configureCapture(){document.querySelectorAll('[data-wa-context]').forEach(link=>{
  if(desktopCapture.matches){link.setAttribute('aria-haspopup','dialog');link.setAttribute('aria-controls','lead-dialog');}
  else{link.removeAttribute('aria-haspopup');link.removeAttribute('aria-controls');}
-});if(!desktopCapture.matches&&leadDialog.open)leadDialog.close();}
-document.querySelectorAll('[data-wa-context]').forEach(link=>link.addEventListener('click',event=>{
- if(!desktopCapture.matches||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
- event.preventDefault();const context=link.dataset.waContext;
+});if(!desktopCapture.matches&&leadDialog.open&&leadDialog.dataset.mobileAllowed!=='true')leadDialog.close();}
+document.querySelectorAll('[data-wa-context],[data-lead-form]').forEach(link=>link.addEventListener('click',event=>{
+ if((!desktopCapture.matches&&!link.dataset.leadForm)||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
+ event.preventDefault();const context=link.dataset.leadForm||link.dataset.waContext;
+ leadDialog.dataset.mobileAllowed=String(!!link.dataset.leadForm);
  leadEpoch++;leadRequestId=null;lastLeadPayload='';showDeliveryAvailability();
  $('#lead-title').textContent=leadTitles[context]||leadTitles.general;
  const prices=apartmentPrices(currentApartment);
