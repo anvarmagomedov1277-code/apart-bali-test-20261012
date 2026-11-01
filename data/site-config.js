@@ -2,7 +2,7 @@
 export const siteConfig = {
   mode: 'public-test', updatedAt: '2026-10-28', name: 'БАЛИ', location: 'Зеленоморск, Дагестан',
   assetVersion: '20261028-desktop1',
-  publicUrl: 'https://anvarmagomedov1277-code.github.io/apart-bali-test-20261012/',
+  publicUrl: 'https://apartcomplexbali.ru/',
   offer: { firstPayment: 500000, ownPercent: 70 },
   contact: { whatsapp: '79887760404', phoneDisplay: '+7 988 776-04-04', instagram: 'apart_bali' },
   leads: { endpoint:'https://bali-telegram-leads-20261015.azurechub6.chatgpt.site/api/leads' }, // Only the HTTPS API address is public; never bot credentials.
