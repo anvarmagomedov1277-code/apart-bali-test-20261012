@@ -1,7 +1,7 @@
-import { siteConfig } from './data/site-config.js?v=20261101-admin1';
-import { startMotion, motionIsReduced } from './motion.js?v=20261101-admin1';
-import { whatsappUrl } from './data/whatsapp.js?v=20261101-admin1';
-import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261101-admin1';
+import { siteConfig } from './data/site-config.js?v=20261111-corrections1';
+import { startMotion, motionIsReduced } from './motion.js?v=20261111-corrections1';
+import { whatsappUrl } from './data/whatsapp.js?v=20261111-corrections1';
+import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261111-corrections1';
 
 const $ = selector => document.querySelector(selector);
 const reducedMotion = motionIsReduced;

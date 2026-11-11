@@ -1,4 +1,4 @@
-import { siteConfig } from './site-config.js?v=20261101-admin1';
+import { siteConfig } from './site-config.js?v=20261111-corrections1';
 export const formatMoney = value => new Intl.NumberFormat('ru-RU').format(value) + ' ₽';
 export function apartmentPrices(apartment) {
   if (!Number.isInteger(apartment.areaHundredths) || apartment.areaHundredths <= 0) return null;

@@ -1,12 +1,14 @@
 // Только публичные сведения. Источники — во внутренней библиотеке.
 export const siteConfig = {
-  mode: 'public-test', updatedAt: '2026-11-01', name: 'БАЛИ', location: 'Зеленоморск, Дагестан',
-  assetVersion: '20261101-admin1',
+  mode: 'public-test', updatedAt: '2026-11-11', name: 'БАЛИ', location: 'Зеленоморск, Дагестан',
+  assetVersion: '20261111-corrections1',
   publicUrl: 'https://apartcomplexbali.ru/',
-  offer: { firstPayment: 500000, ownPercent: 70 },
+  offer: { firstPayment: 500000, ownPercent: 70,
+    heroTerms: 'Апартаменты в Зеленоморске от 2,2 млн ₽. Первоначальный взнос от 500 000 ₽. Рассрочка до 50 месяцев',
+    repaymentNote: 'Оставшиеся 30% погашаются за счёт дохода от аренды через управляющую компанию. Подробные условия — в договоре' },
   contact: { whatsapp: '79887760404', phoneDisplay: '+7 988 776-04-04', instagram: 'apart_bali' },
   leads: { endpoint:'https://bali-telegram-leads-20261015.azurechub6.chatgpt.site/api/leads' }, // Only the HTTPS API address is public; never bot credentials.
-  project: { buildings: 18, floors: '8–12', apartments: 2244, area: 76000 },
+  project: { buildings: 18, floors: '11', apartments: 2244, area: 76000 },
   investment: { monthlyMin: 80000, monthlyMax: 150000, resaleGrowth: 2000000, status: 'forecast' },
   pricing: { cashPerSquare:85000, installmentPerSquare:95000 },
   gallery: [
