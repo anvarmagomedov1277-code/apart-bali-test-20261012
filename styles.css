@@ -217,8 +217,7 @@ html[data-page-visibility="hidden"] .button::before{animation-play-state:paused!
 .hero-terms{margin-top:12px;font-size:14px;line-height:1.55;color:var(--paper);max-width:42ch}
 .hero-repayment{margin-top:10px;font-size:12px;line-height:1.55;color:var(--sage);max-width:48ch}
 .secondary-whatsapp{display:inline-flex;align-items:center;min-height:44px;font-size:12px;text-decoration:underline;text-underline-offset:4px;color:var(--apricot)}
+.contact .secondary-whatsapp{color:var(--copper)}
 .contact-hint .desktop-copy{display:inline}
-.mobile-lead-link{display:none}
-@media(max-width:767px){.mobile-lead-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:0;background:none;color:inherit;font:inherit;font-size:12px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}.hero-offer .mobile-lead-link{padding-block:4px;min-height:36px}.site-footer .mobile-lead-link{justify-self:start;padding-left:0}}
 
 .admin-entry{margin:0;min-height:100svh;display:grid;place-items:center;padding:32px;background:#f5f0e8;color:#172536;font-family:Manrope,sans-serif}.admin-entry main{max-width:640px}.admin-entry h1{font-size:28px;margin-bottom:20px}.admin-entry p{line-height:1.6;margin-bottom:20px}.admin-entry a{color:#794628;text-decoration:underline;text-underline-offset:4px}

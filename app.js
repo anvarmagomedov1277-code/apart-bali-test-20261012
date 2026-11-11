@@ -1,7 +1,7 @@
-import { siteConfig } from './data/site-config.js?v=20261111-corrections1';
-import { startMotion, motionIsReduced } from './motion.js?v=20261111-corrections1';
-import { whatsappUrl } from './data/whatsapp.js?v=20261111-corrections1';
-import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261111-corrections1';
+import { siteConfig } from './data/site-config.js?v=20261111-review1';
+import { startMotion, motionIsReduced } from './motion.js?v=20261111-review1';
+import { whatsappUrl } from './data/whatsapp.js?v=20261111-review1';
+import { apartmentPrices, formatMoney } from './data/pricing.js?v=20261111-review1';
 
 const $ = selector => document.querySelector(selector);
 const reducedMotion = motionIsReduced;
@@ -136,7 +136,7 @@ let scrollPending=false;
 window.addEventListener('scroll',()=>{if(scrollPending)return;scrollPending=true;requestAnimationFrame(()=>{updateContext();scrollPending=false;});},{passive:true});
 window.addEventListener('resize',()=>{updateContext();updateSticky();});
 
-// Desktop submits only to a configured server; mobile follows native WhatsApp href.
+// Primary hero/contact buttons open capture on every viewport; other mobile links retain WhatsApp.
 let leadEndpoint=siteConfig.leads?.endpoint||'',leadEpoch=0,leadRequestId=null,lastLeadPayload='',leadSending=false;
 if(leadEndpoint){try{const endpoint=new URL(leadEndpoint,location.href);if(endpoint.protocol!=='https:'||endpoint.username||endpoint.password)leadEndpoint='';}catch{leadEndpoint='';}}
 function showDeliveryAvailability(){
@@ -184,7 +184,8 @@ leadForm.addEventListener('submit',async event=>{
   const ticketUrl=new URL('/api/lead-ticket',new URL(leadEndpoint,location.href));
   ticketUrl.searchParams.set('request_id',leadRequestId);
   const ticketResponse=await fetch(ticketUrl,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(10000)});
-  const ticketData=await ticketResponse.json();if(!ticketResponse.ok)throw Error('Lead session unavailable');
+  const ticketData=await ticketResponse.json();if(epoch!==leadEpoch)return;
+  if(!ticketResponse.ok){$('#lead-status').textContent=ticketResponse.status===429?'Слишком много попыток. Подождите минуту и повторите.':'Не удалось подготовить отправку. Попробуйте ещё раз или позвоните.';return;}
   const response=await fetch(leadEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'omit',body:JSON.stringify({...payload,requestId:leadRequestId,ticket:ticketData.ticket}),signal:AbortSignal.timeout(15000)});
   const result=await response.json();if(epoch!==leadEpoch)return;
   if(!response.ok||result.ok!==true){$('#lead-status').textContent=response.status===429?'Слишком много попыток. Подождите минуту и повторите.':result.error==='delivery_unconfirmed'?'Доставку пока не удалось подтвердить. Для связи позвоните по номеру ниже.':'Не удалось отправить заявку. Контакты сохранены в форме — попробуйте ещё раз или позвоните.';return;}
